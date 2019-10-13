@@ -61,7 +61,15 @@ class Module implements ModuleDefinitionInterface
 
             $view->registerEngines(
                 [
-                    ".volt" => VoltEngine::class,
+                    ".volt" => function($view, $di) {
+                        $volt = new VoltEngine($view, $di);
+                        $volt -> setOptions(array(
+                            'compileAlways' => true,
+                            'compiledPath'  =>  BASE_PATH . '/runtime/compiled/',
+                            'compiledExtension' => '.php',
+                        ));
+                        return $volt;
+                    },
                 ]
             );
 
